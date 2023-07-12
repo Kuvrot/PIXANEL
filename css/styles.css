@@ -10899,7 +10899,7 @@ canvas{
 
   text-align: center;
   position: absolute;
-  top: 10%;
+  top: 15%;
   left: 0;
   right: 0;
   margin: auto;
@@ -10914,7 +10914,7 @@ canvas{
 }
 #canvas {
 
-  background-color:rgba(0, 0, 0, 0.5);
+  background-color:rgba(0, 0, 0, 0);
 
 }
 

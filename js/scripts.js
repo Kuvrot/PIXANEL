@@ -123,38 +123,38 @@ window.addEventListener('DOMContentLoaded', event => {
         }
     }
 
-    //canvas.width = canvasSize;
-    //canvas.height = canvasSize;
+    canvas.width = canvasSize;
+    canvas.height = canvasSize;
+    gridCanvas.width = canvasSize;
+    gridCanvas.height = canvasSize;
+    
+    function drawGrid(){
 
-    function drawGrid() {
-        ctx.clearRect(0, 0, canvasSize, canvasSize); // Borrar el contenido anterior del canvas
+        gridCtx.clearRect(0, 0, canvasSize, canvasSize);
 
-        if (!canvasLoaded) {
-            for (var x = 0; x < GRID_SIZE; x++) {
-                for (var y = 0; y < GRID_SIZE; y++) {
+        for (let x = 0; x < GRID_SIZE; x++){
+
+            for (let y = 0; y < GRID_SIZE; y++){
+
                 var posX = x * PIXEL_SIZE;
                 var posY = y * PIXEL_SIZE;
 
-                ctx.strokeStyle = '#000'; // Color del borde
-                ctx.lineWidth = 1; // Ancho del borde
+                gridCtx.lineWidth = 1;
+                gridCtx.strokeStyle = "#000";
 
-                ctx.strokeRect(posX, posY, PIXEL_SIZE, PIXEL_SIZE); // Dibujar un rectángulo en cada posición del grid
-                }
+                gridCtx.strokeRect(posX , posY , PIXEL_SIZE , PIXEL_SIZE);
+
             }
+
         }
+
     }
 
-    setTimeout(() => {
-           
-        if (canvasLoaded){
+   setTimeout(() => {
 
-            //drawGrid();
-            canvasLoaded = true;
-
-        }
-
-    }, 0);
-
+    drawGrid();
+    
+   }, 0);
 
 });
 
@@ -163,7 +163,7 @@ function saveImage() {
 
   // Guardar la imagen del canvas temporal
   var link = document.createElement('a');
-  link.href = tempCanvas.toDataURL();
+  link.href = canvas.toDataURL();
   link.download = 'canvas_image.png';
   link.click();
   }
