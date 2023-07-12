@@ -3,11 +3,21 @@ var tool = 0;
 var currentColor = "";
 var canvas = null;
 var ctx = null;
+var gridCanvas = null;
+var gridCtx = null;
+var PIXEL_SIZE = 32;
+var canvasLoaded = false;
+var GRID_SIZE = 16; // Tamaño del grid en filas y columnas
+var canvasSize = PIXEL_SIZE * GRID_SIZE; // Tamaño total del canvas
 
 window.addEventListener('DOMContentLoaded', event => {
 
     canvas = document.getElementById('canvas');
     ctx = canvas.getContext('2d');
+
+    gridCanvas = document.getElementById('gridCanvas');
+    gridCtx = gridCanvas.getContext('2d');
+
     // Toggle the side navigation
     const sidebarToggle = document.body.querySelector('#sidebarToggle');
     if (sidebarToggle) {
@@ -44,8 +54,6 @@ window.addEventListener('DOMContentLoaded', event => {
     pixelWidth.addEventListener('input' , setPixelWidth);
 
     //draw
-    
-    let PIXEL_SIZE = 16;
 
     canvas.style.cursor = "crosshair";
 
@@ -115,7 +123,50 @@ window.addEventListener('DOMContentLoaded', event => {
         }
     }
 
+    //canvas.width = canvasSize;
+    //canvas.height = canvasSize;
+
+    function drawGrid() {
+        ctx.clearRect(0, 0, canvasSize, canvasSize); // Borrar el contenido anterior del canvas
+
+        if (!canvasLoaded) {
+            for (var x = 0; x < GRID_SIZE; x++) {
+                for (var y = 0; y < GRID_SIZE; y++) {
+                var posX = x * PIXEL_SIZE;
+                var posY = y * PIXEL_SIZE;
+
+                ctx.strokeStyle = '#000'; // Color del borde
+                ctx.lineWidth = 1; // Ancho del borde
+
+                ctx.strokeRect(posX, posY, PIXEL_SIZE, PIXEL_SIZE); // Dibujar un rectángulo en cada posición del grid
+                }
+            }
+        }
+    }
+
+    setTimeout(() => {
+           
+        if (canvasLoaded){
+
+            //drawGrid();
+            canvasLoaded = true;
+
+        }
+
+    }, 0);
+
+
 });
+
+
+function saveImage() {
+
+  // Guardar la imagen del canvas temporal
+  var link = document.createElement('a');
+  link.href = tempCanvas.toDataURL();
+  link.download = 'canvas_image.png';
+  link.click();
+  }
 
 
 function newFile (){

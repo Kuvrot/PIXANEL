@@ -10858,14 +10858,14 @@ body.sb-sidenav-toggled #wrapper #sidebar-wrapper {
 #canvas-container {
 
   display: grid;
-  place-items: center;
+  align-items: center;
 
 }
 
 
 canvas{
 
-  background-color: white;
+ 
   border-radius: 0.5%;
   margin-top:10%;
 
@@ -10876,13 +10876,6 @@ canvas{
   text-align:center;
   margin-bottom:5%;
   margin-top:25%;
-
-}
-
-#colorPicker{
-
-margin-left:175%;
-
 
 }
 
@@ -10899,6 +10892,29 @@ margin-left:175%;
 .bar {
 
   background-color: var(--bs-gray-700);
+
+}
+
+.canvas {
+
+  text-align: center;
+  position: absolute;
+  top: 10%;
+  left: 0;
+  right: 0;
+  margin: auto;
+
+}
+
+#gridCanvas {
+
+  background-color: white;
+  z-index: -1;
+
+}
+#canvas {
+
+  background-color:rgba(0, 0, 0, 0.5);
 
 }
 
