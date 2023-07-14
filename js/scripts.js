@@ -10,6 +10,13 @@ var canvasLoaded = false;
 var GRID_SIZE = 16; // Tamaño del grid en filas y columnas
 var canvasSize = PIXEL_SIZE * GRID_SIZE; // Tamaño total del canvas
 
+
+//undp and redo functions
+var currentIndex = -1;
+var History = [];
+var Z = false;
+var canUndo = true;
+
 window.addEventListener('DOMContentLoaded', event => {
 
     canvas = document.getElementById('canvas');
@@ -87,7 +94,6 @@ window.addEventListener('DOMContentLoaded', event => {
     }
 
 
-
     let drawing = false;
 
     canvas.onmousedown = function (e){
@@ -102,6 +108,9 @@ window.addEventListener('DOMContentLoaded', event => {
 
         canvas.onmousemove = null;  
         drawing = false;
+        History.push(ctx.getImageData(0 , 0 , canvasSize , canvasSize));
+        currentIndex++;
+        console.log(History[currentIndex]);
            
     }
 
@@ -159,13 +168,72 @@ window.addEventListener('DOMContentLoaded', event => {
 });
 
 
+//Undo and redu
+
+
+
+document.addEventListener('keydown', function(event) {
+ 
+    if (canUndo && !Z){
+        if (event.ctrlKey) {
+        
+            if (event.key === 'z'){
+                Z = true;
+                canUndo = false;
+                undo();
+                
+            }
+            
+            
+        }
+    
+    }
+
+  });
+
+
+  
+
+  function undo () {
+
+    
+    console.log(currentIndex);
+    
+    if (!canUndo){
+
+        if (currentIndex > 0) {
+
+            History.pop();
+            currentIndex--;
+            console.log(currentIndex);
+        
+            
+
+            ctx.putImageData(History[currentIndex] , 0 , 0);
+
+        }else{
+            History = [];
+            currentIndex = -1;
+            ctx.clearRect(0 , 0 , canvas.width , canvas.height);
+        }
+
+            Z = false;
+            setTimeout(() => {
+                canUndo = true;
+            }, 10);
+
+   }
+
+  }
+
+
 function saveImage() {
 
-  // Guardar la imagen del canvas temporal
-  var link = document.createElement('a');
-  link.href = canvas.toDataURL();
-  link.download = 'canvas_image.png';
-  link.click();
+    // Guardar la imagen del canvas temporal
+    var link = document.createElement('a');
+    link.href = canvas.toDataURL();
+    link.download = 'canvas_image.png';
+    link.click();
   }
 
 
