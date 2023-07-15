@@ -222,6 +222,12 @@ if (!canUndo){
 }
 
 
+function newFile (){
+
+    location.reload();
+
+}
+
 function saveProject () {
 
     const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
@@ -241,7 +247,7 @@ function saveProject () {
     // Create a download link
     const link = document.createElement('a');
     link.href = url;
-    link.download = 'image_data.json';
+    link.download = 'untitledProject.anel';
   
     // Trigger a click event on the link to initiate the download
     link.click();
@@ -258,6 +264,42 @@ function saveProject () {
     };
   }
 
+
+  function openProject() {
+    let input = document.createElement('input');
+    input.type = 'file';
+    input.accept = '.anel';
+    input.onchange = function () {
+      let file = input.files[0];
+      let reader = new FileReader();
+      reader.onload = function () {
+        let fileContents = reader.result;
+        let imageData = createImageDataFromText(fileContents);
+        ctx.putImageData(imageData, 0, 0);
+      };
+      reader.readAsText(file);
+    };
+    input.click();
+  }
+  
+  function createImageDataFromText(text) {
+    // Parse the text content and extract the necessary information
+    let data = JSON.parse(text);
+    let width = data.width;
+    let height = data.height;
+    let pixelData = data.data;
+  
+    // Create a new ImageData object with the extracted width and height
+    let imageData = ctx.createImageData(width, height);
+  
+    // Assign the pixel data from the parsed data to the ImageData object
+    for (let i = 0; i < pixelData.length; i++) {
+      imageData.data[i] = pixelData[i];
+    }
+  
+    return imageData;
+  }
+
 function saveImage() {
 
     // Guardar la imagen del canvas temporal
@@ -266,13 +308,6 @@ function saveImage() {
     link.download = 'canvas_image.png';
     link.click();
   }
-
-
-function newFile (){
-
-    location.reload();
-
-}
 
 var toolElements = document.getElementsByClassName('tool');
 
