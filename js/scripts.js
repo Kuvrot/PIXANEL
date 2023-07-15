@@ -183,8 +183,7 @@ document.addEventListener('keydown', function(event) {
                 undo();
                 
             }
-            
-            
+                 
         }
     
     }
@@ -194,43 +193,75 @@ document.addEventListener('keydown', function(event) {
 
   
 
-  function undo () {
+function undo () {
 
-    
-    console.log(currentIndex);
-    
-    if (!canUndo){
+console.log(currentIndex);
 
-        if (currentIndex > 0) {
+if (!canUndo){
 
-            History.pop();
-            currentIndex--;
-            console.log(currentIndex);
-        
-            
+    if (currentIndex > 0) {
 
-            ctx.putImageData(History[currentIndex] , 0 , 0);
+        History.pop();
+        currentIndex--;
+        console.log(currentIndex);
+        ctx.putImageData(History[currentIndex] , 0 , 0);
 
-        }else{
-            History = [];
-            currentIndex = -1;
-            ctx.clearRect(0 , 0 , canvas.width , canvas.height);
-        }
+    }else{
+        History = [];
+        currentIndex = -1;
+        ctx.clearRect(0 , 0 , canvas.width , canvas.height);
+    }
 
-            Z = false;
-            setTimeout(() => {
-                canUndo = true;
-            }, 10);
+        Z = false;
+        setTimeout(() => {
+            canUndo = true;
+        }, 10);
 
-   }
+}
 
+}
+
+
+function saveProject () {
+
+    const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+
+    // Convert the image data to a serializable format
+    const serializedData = serializeImageData(imageData);
+  
+    // Convert the serialized data to a JSON string
+    const json = JSON.stringify(serializedData);
+  
+    // Create a Blob from the JSON string
+    const blob = new Blob([json], { type: 'application/json' });
+  
+    // Create a URL from the Blob
+    const url = URL.createObjectURL(blob);
+  
+    // Create a download link
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = 'image_data.json';
+  
+    // Trigger a click event on the link to initiate the download
+    link.click();
+  
+    // Revoke the URL object to release resources
+    URL.revokeObjectURL(url);
   }
-
+  
+  function serializeImageData(imageData) {
+    return {
+      width: imageData.width,
+      height: imageData.height,
+      data: Array.from(imageData.data),
+    };
+  }
 
 function saveImage() {
 
     // Guardar la imagen del canvas temporal
-    var link = document.createElement('a');
+    let link = document.createElement('a');
     link.href = canvas.toDataURL();
     link.download = 'canvas_image.png';
     link.click();
