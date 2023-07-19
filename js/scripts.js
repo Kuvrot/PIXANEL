@@ -82,6 +82,8 @@ window.addEventListener('DOMContentLoaded', event => {
 
     //draw
 
+    canvas.style.cursor = "crosshair";
+    
     function draw (x , y){
 
         if (tool == 0){
@@ -95,8 +97,7 @@ window.addEventListener('DOMContentLoaded', event => {
                 PIXEL_SIZE
                 
             );
-            canvas.style.cursor = "crosshair";
-
+            
         }else if (tool == 1){
 
             ctx.clearRect
@@ -107,7 +108,6 @@ window.addEventListener('DOMContentLoaded', event => {
                 PIXEL_SIZE
                 
             );
-            canvas.style.cursor = "crosshair";
 
         }
     
