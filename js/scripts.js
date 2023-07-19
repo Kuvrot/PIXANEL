@@ -1,17 +1,19 @@
-
-var tool = 0;
+var tool = 0; //Tool that is currently selected
 var currentColor = "";
+
 var canvas = null;
 var ctx = null;
+
 var gridCanvas = null;
 var gridCtx = null;
+
 var PIXEL_SIZE = 32;
 var canvasLoaded = false;
-var GRID_SIZE = 16; // Tamaño del grid en filas y columnas
-var canvasSize = PIXEL_SIZE * GRID_SIZE; // Tamaño total del canvas
+var GRID_SIZE = 16; // size of grid
+var canvasSize = PIXEL_SIZE * GRID_SIZE; // full size of canvas
+var canvasSizeInput = null; //This is the element where the size of the canvas can be changed 
 
-
-//undp and redo functions
+//undo and redo variables 
 var currentIndex = -1;
 var History = [];
 var Z = false;
@@ -24,6 +26,10 @@ window.addEventListener('DOMContentLoaded', event => {
 
     gridCanvas = document.getElementById('gridCanvas');
     gridCtx = gridCanvas.getContext('2d');
+
+    canvasSizeInput = document.getElementById('canvasSize');
+
+    canvasSizeInput.value = 16;
 
     // Toggle the side navigation
     const sidebarToggle = document.body.querySelector('#sidebarToggle');
@@ -52,17 +58,29 @@ window.addEventListener('DOMContentLoaded', event => {
     
     const pixelWidth = document.getElementById('pixelWidth');
 
+    pixelWidth.value = 32;
+
     function setPixelWidth (){
 
         PIXEL_SIZE = pixelWidth.value;
 
+
+        if (PIXEL_SIZE == 16){
+
+            canvasSizeInput.setAttribute("max" , 53);
+
+        }else if (PIXEL_SIZE == 32) {
+
+            canvasSizeInput.setAttribute("max" , 27);
+
+
+        }
+
     }
-    
+
     pixelWidth.addEventListener('input' , setPixelWidth);
 
     //draw
-
-    canvas.style.cursor = "crosshair";
 
     function draw (x , y){
 
@@ -77,6 +95,7 @@ window.addEventListener('DOMContentLoaded', event => {
                 PIXEL_SIZE
                 
             );
+            canvas.style.cursor = "crosshair";
 
         }else if (tool == 1){
 
@@ -88,6 +107,7 @@ window.addEventListener('DOMContentLoaded', event => {
                 PIXEL_SIZE
                 
             );
+            canvas.style.cursor = "crosshair";
 
         }
     
@@ -130,34 +150,14 @@ window.addEventListener('DOMContentLoaded', event => {
             );
 
         }
+
+        
     }
 
     canvas.width = canvasSize;
     canvas.height = canvasSize;
     gridCanvas.width = canvasSize;
     gridCanvas.height = canvasSize;
-    
-    function drawGrid(){
-
-        gridCtx.clearRect(0, 0, canvasSize, canvasSize);
-
-        for (let x = 0; x < GRID_SIZE; x++){
-
-            for (let y = 0; y < GRID_SIZE; y++){
-
-                var posX = x * PIXEL_SIZE;
-                var posY = y * PIXEL_SIZE;
-
-                gridCtx.lineWidth = 1;
-                gridCtx.strokeStyle = "#000";
-
-                gridCtx.strokeRect(posX , posY , PIXEL_SIZE , PIXEL_SIZE);
-
-            }
-
-        }
-
-    }
 
    setTimeout(() => {
 
@@ -165,13 +165,52 @@ window.addEventListener('DOMContentLoaded', event => {
     
    }, 0);
 
+   function drawGrid(){
+
+    gridCtx.clearRect(0, 0, canvasSize, canvasSize);
+
+    for (let x = 0; x < GRID_SIZE; x++){
+
+        for (let y = 0; y < GRID_SIZE; y++){
+
+            var posX = x * PIXEL_SIZE;
+            var posY = y * PIXEL_SIZE;
+
+            gridCtx.lineWidth = 1;
+            gridCtx.strokeStyle = "#000";
+
+            gridCtx.strokeRect(posX , posY , PIXEL_SIZE , PIXEL_SIZE);
+
+            }
+
+        }
+
+    }
+
+    // change canvas size
+
+    function resizeCanvas () {
+
+        GRID_SIZE = canvasSizeInput.value;
+        canvasSize = PIXEL_SIZE * GRID_SIZE;
+        canvas.width = canvasSize;
+        canvas.height = canvasSize;
+        gridCanvas.width = canvasSize;
+        gridCanvas.height = canvasSize;
+
+        drawGrid();
+
+    }
+
+    canvasSizeInput.addEventListener('input' , resizeCanvas);
+
 });
 
 
+
+
+
 //Undo and redu
-
-
-
 document.addEventListener('keydown', function(event) {
  
     if (canUndo && !Z){
@@ -313,15 +352,9 @@ var toolElements = document.getElementsByClassName('tool');
 
 function selectTool (n) {
 
+    toolElements[tool].classList.remove('active');
     tool = n;
-
-    for (let i = 0; i < toolElements.length; i++){
-
-        toolElements[i].classList.remove('active');
-
-    }
-
-    toolElements[n].classList.add('active');
+    toolElements[tool].classList.add('active');
    
 }
 
@@ -340,4 +373,6 @@ window.addEventListener('beforeunload', function (e) {
     // Retorna el mensaje de confirmación en navegadores modernos
     return confirmationMessage;
   });
+
+
 
