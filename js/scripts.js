@@ -210,7 +210,7 @@ window.addEventListener('DOMContentLoaded', event => {
 
 
 
-//Undo and redu
+//Undo and redo
 document.addEventListener('keydown', function(event) {
  
     if (canUndo && !Z){
@@ -341,7 +341,7 @@ function saveProject () {
 
 function saveImage() {
 
-    // Guardar la imagen del canvas temporal
+    // Save the image of the temporal canvas
     let link = document.createElement('a');
     link.href = canvas.toDataURL();
     link.download = 'canvas_image.png';
@@ -361,16 +361,16 @@ function selectTool (n) {
 selectTool(0);
 
 window.addEventListener('beforeunload', function (e) {
-    // Cancela el evento predeterminado
+    // Cancel the default event
     e.preventDefault();
   
-    // Mensaje de confirmación
+    // Confirmation message
     const confirmationMessage = 'All unsaved changes will be lost, are you shure?';
   
-    // Establece el mensaje de confirmación en algunos navegadores
+    // Establish the confirmation message in some browsers
     e.returnValue = confirmationMessage;
   
-    // Retorna el mensaje de confirmación en navegadores modernos
+    // return the confirmation message in modern browsers
     return confirmationMessage;
   });
 
