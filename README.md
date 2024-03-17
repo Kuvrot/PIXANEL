@@ -1,7 +1,6 @@
 
-<img src="https://github.com/Kuvrot/PIXANEL/assets/23508114/c912696e-1cbe-460c-89bd-68fbc9d5ee48" width=512>
+<img src="https://github.com/Kuvrot/PIXANEL/assets/23508114/4dd7d46d-ca09-40e8-9aa2-34a6b1dac8d0" width=512>
 
----
 
 # PIXANEL
 Free open source pixel art editor.
